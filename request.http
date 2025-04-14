@@ -1,0 +1,76 @@
+### Test de connexion d'un administrateur (Garder le token pour les requêtes suivantes)
+POST http://localhost:3000/api/auth/admin
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "adminpassword"
+}
+
+###
+
+### Création d'un nouvel utilisateur ou technicien (par un administrateur(utiliser le token admin))
+POST http://localhost:3000/api/auth/new
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "name": "Jean Dupont",
+  "email": "jean.dupont@example.com",
+  "password": "securepassword",
+  "role": "technician"
+}
+
+###
+
+### Connexion d'un utilisateur ou technicien
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jean.dupont@example.com",
+  "password": "securepassword"
+}
+
+###
+
+### Création d'un nouveau ticket (par un utilisateur ou un technicien(utiliser le token utilisateur ou  technicien))
+POST http://localhost:3000/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{
+  "title": "Problème de connexion",
+  "description": "Impossible d'accéder à l'application",
+  "technicianId": 2
+}
+
+###
+
+### Récupération de tous les tickets (par un technicien)
+GET http://localhost:3000/api/tickets
+Authorization: Bearer {{technician_token}}
+
+###
+
+### Récupération d'un ticket spécifique
+GET http://localhost:3000/api/tickets/1
+Authorization: Bearer {{user_token}}
+
+###
+
+### Mise à jour d'un ticket (par un technicien)
+PUT http://localhost:3000/api/tickets/1
+Content-Type: application/json
+Authorization: Bearer {{technician_token}}
+
+{
+  "status": "in progress",
+  "technicianId": 2
+}
+
+###
+
+### Suppression d'un ticket (par un administrateur)
+DELETE http://localhost:3000/api/admin/tickets/1
+Authorization: Bearer {{admin_token}}
